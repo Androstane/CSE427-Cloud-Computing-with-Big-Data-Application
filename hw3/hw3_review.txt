@@ -1,0 +1,1 @@
+The homework focuses on mapreduce and since all questions are given in the "explanation" mode, it started to become confusing again. The problem itself are not hard but it is not clear especially the notation used in in power point presentation and that used in the text book and that used in the homework question are completely different. 
