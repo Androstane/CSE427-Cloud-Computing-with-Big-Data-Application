@@ -1,0 +1,1 @@
+So this is the first home work including actual programming. It is a little hard to get start with especially my VM can not connect to internet so I have to move file between my host computer and VM every time. But after that it works fine and I am happy to learn how the code actually works. 
