@@ -1,6 +1,8 @@
 package stubs;
 
 import java.util.HashSet;
+import java.util.Set;
+import java.io.FileReader;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.IntWritable;
@@ -8,20 +10,70 @@ import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Partitioner;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.File;
+
 public class SentimentPartitioner extends Partitioner<Text, IntWritable> implements
     Configurable {
 
   private Configuration configuration;
-  Set<String> positive = new HashSet<String>;
-  Set<String> negative = new HashSet<String>;
+  Set<String> positive = new HashSet<String>();
+  Set<String> negative = new HashSet<String>();
 
 
   @Override
   public void setConf(Configuration configuration) {
     /*
-     * TODO implement if necessary
+     * add positive-word txt and negative-word txt. 
      */
+	  
+	  File positiveword = new File("positive-words.txt");
+	  File negativeword = new File("negative-words.txt");
+	  /*
+	   * add word in positive-word.txt file to hashset, ignore lines start with ";"
+	   */
+	  try{
+		  BufferedReader positiveFile = new BufferedReader(new FileReader(positiveword));
+		  String line = positiveFile.readLine();                                  //extract word by split lines
+		  while (line != null){                                                   //if line is not empty 
+			  if (line.charAt(0) != ';'){                                         //if the line is not started with ;, add it to positive. 
+				  positive.add(line);
+			  }
+		  }
+		  positiveFile.close();
+	  }
+      catch (FileNotFoundException e) {
+    	// TODO Auto-generated catch block
+	      e.printStackTrace();
+      } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	  /*
+	   * add word in positive-word.txt file to hashset, ignore lines start with ";"
+	   * The method is exactly same as used for positive-word.txt
+	   */
+	  try{
+		  BufferedReader negativeFile = new BufferedReader(new FileReader(negativeword));
+		  String line = negativeFile.readLine();
+		  while (line != null){
+			  if (line.charAt(0) != ';'){
+				  negative.add(line);
+			  }
+		  }
+		  negativeFile.close();
+	  }
+      catch (FileNotFoundException e) {
+    	// TODO Auto-generated catch block
+	      e.printStackTrace();
+      } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
   }
+
 
   /**
    * Implement the getConf method for the Configurable interface.
@@ -41,17 +93,17 @@ public class SentimentPartitioner extends Partitioner<Text, IntWritable> impleme
    * set so that there are exactly 3 reducers.
    */
   public int getPartition(Text key, IntWritable value, int numReduceTasks) {
-    /*
-     * TODO implement
-     * Change the return 0 statement below to return the number of the sentiment 
-     * category; use 0 for positive words, 1 for negative words, and 2 for neutral words. 
-     * Use the sets of positive and negative words to find out the sentiment of each word.
-     *
-     * Hint: use positive.contains(key.toString()) and negative.contains(key.toString())
-     * If a word appears in both lists assume it is positive. That is, once you found 
-     * that a word is in the positive list you do not need to check if it is in the 
-     * negative list. 
-     */
-     return 0;
+ 
+	  if (positive.contains(key.toString())){                  //return 0 if it contains positive key
+		  return 0;
+	  }
+	  if (negative.contains(key.toString())){                  //return 1 if it contains negative key but not positive key
+		  return 1;
+	  }
+	  else{
+		  return 2;                                            //return 2 if it contains neither positive nor negative key 
+	  }
+	  
+	  
   }
 }

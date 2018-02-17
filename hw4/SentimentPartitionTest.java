@@ -29,10 +29,24 @@ public class SentimentPartitionTest {
 		 * Test the words "love", "deadly", and "zodiac". 
 		 * The expected outcomes should be 0, 1, and 2. 
 		 */
-        
+       
  		/*
-		 * TODO implement
-		 */          
+		 * Compare result of love with 0.
+		 */      
+		 int result_love = spart.getPartition(new Text("love"), new IntWritable(), 3);
+	     assertEquals(result_love,0);
+	     /*
+	      * Compare result of deadly with 1.
+	      */
+
+	     int result_deadly = spart.getPartition(new Text("deadly"), new IntWritable(), 3);
+	     assertEquals(result_deadly,1);
+	    
+	     /*Compare result of zodiac with 2.
+	      *  
+	      */
+	     int result_zodiac = spart.getPartition(new Text("zodiac"), new IntWritable(), 3);
+	     assertEquals(result_zodiac,2);
 		
 	}
 
